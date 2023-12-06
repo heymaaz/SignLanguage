@@ -10,18 +10,18 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentVideoIndex = 0;
     const videoElement = document.getElementById('bslVideo');
 
-    videoElement.muted = true; // Mute the video
-    videoElement.controls = false; // Optionally hide controls initially
+    videoElement.muted = true; // Mute the video so browsers don't block autoplay
+    videoElement.controls = false; // To hide the browser controls and prevent users from pausing the video
 
-    videoElement.addEventListener('ended', playNextVideo);
+    videoElement.addEventListener('ended', playNextVideo);// Play the next video when the current one ends
 
-    function playNextVideo() {
-        if (currentVideoIndex < videoSources.length) {
-            videoElement.src = videoSources[currentVideoIndex];
-            videoElement.play().catch(e => console.error(e));
-            currentVideoIndex++;
+    function playNextVideo() {// Play the next video
+        if (currentVideoIndex < videoSources.length) {// Check if there are more videos to play
+            videoElement.src = videoSources[currentVideoIndex];// Set the video source
+            videoElement.play().catch(e => console.error(e));// Play the video
+            currentVideoIndex++;// Increment the index
         } else {
-            console.log('All videos played.');
+            console.log('All videos played.');// Log a message when all videos have been played
         }
     }
 
