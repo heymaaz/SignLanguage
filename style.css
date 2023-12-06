@@ -1,0 +1,8 @@
+.bsl-video-container .signbsldata-embed {
+    display: none; /* Hide the entire embed except for the video */
+}
+
+.bsl-video-container video {
+    width: 100%; /* Adjust the width as needed */
+    display: block; /* Ensures the video is not inline */
+}
