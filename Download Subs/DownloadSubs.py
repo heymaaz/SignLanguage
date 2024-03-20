@@ -6,6 +6,7 @@ def download_subtitles(url):
         'subtitleslangs': ['en'],  # Specify the language code for the subtitles you want to download
         'skip_download': True,  # Skip downloading the video
         'writeautomaticsub': True,  # Write the automatically generated subtitle file
+        'outtmpl': 'subtitles/%(id)s.%(ext)s',#save to subtitles folder
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
