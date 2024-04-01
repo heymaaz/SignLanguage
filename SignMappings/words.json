@@ -330,7 +330,6 @@
     "Welsh": "/sign/welsh",
     "area": "/sign/area",
     "bank": "/sign/bank",
-    "caf\u00e9": "/sign/caf\u00e9",
     "club": "/sign/club",
     "english": "/sign/english",
     "farm": "/sign/farm",
@@ -676,5 +675,6 @@
     "social distancing": "/sign/social-distancing",
     "test": "/sign/test",
     "test swab": "/sign/test-swab",
-    "vaccine": "/sign/vaccine"
+    "vaccine": "/sign/vaccine",
+    "cafe": "/sign/cafe"
 }
