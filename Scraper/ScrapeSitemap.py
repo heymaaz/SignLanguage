@@ -1,0 +1,2623 @@
+import json
+import requests
+from bs4 import BeautifulSoup
+from xml.etree import ElementTree as ET
+''' 
+# TO get the sign mappings from the websites sitemap
+# Provided XML data
+xml_data = """
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://www.signbsl.com/</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/gcse-vocabulary</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/about</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/contact</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/example</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/speed</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/hope</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/windshield-wiper</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/insurance</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/toilet</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/scare</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/customer</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/translator</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/see-you-tomorrow</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/video-art</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/new</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/horse</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/ham-fisted</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/retired</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/f</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/oval</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/hexadecimal</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/capacitance</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/government</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/learn</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/you-okay</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/outbox</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/forget</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/early</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/nothing</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/h</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/five</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/thank-you</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/more</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/make</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/happy</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/no</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/dictionary</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/with</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/chocolate</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/know</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/want</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/blue</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/like</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/how</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/i-love-you</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/have</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/old</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/dog</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/good</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/will</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/think</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/try</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/today</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/people</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/time</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/water</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/we</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/why</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/what</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/a</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/b</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/c</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/d</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/e</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/f</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/g</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/h</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/i</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/j</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/k</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/l</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/m</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/n</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/o</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/p</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/q</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/r</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/s</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/t</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/u</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/v</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/w</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/x</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/y</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/dictionary/z</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/privacy-policy</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/accept</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/arrive</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/ask</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/believe</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/born</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/break</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/bring</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/buy</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/change</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/come</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/communicate</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/continue</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/cook</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/do</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/drink</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/drive</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/drove</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/eat</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/encourage</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/enter</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/exist</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/explain</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/feel</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/find</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/finish</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/fish</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/fix</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/fly</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/follow</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/get</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/give</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/go</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/grow-up</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/happen</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/hear</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/help</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/hold</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/interpret</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/involve</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/join</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/kick</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/know-not</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/laugh</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/leave</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/leave-alone</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/live</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/look</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/look-after</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/love</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/marry</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/mean</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/meet</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/mix</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/move</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/negotiate</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/pay</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/pick</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/play</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/progress</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/put-aside</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/read</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/remember</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/saw</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/say</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/search</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/see</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/send-text</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/shift</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/shock</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/show</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/sign</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/sign-chat</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/sit</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/sleep</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/smell</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/speak</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/stand</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/start</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/stay</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/stop</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/take</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/talk</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/teach</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/telephone</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/tell</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/travel</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/understand</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/use</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/visit</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/wait</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/wake-up</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/walk</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/watch</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/wonder</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/work</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/write</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/airplane</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/airport</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/ball</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/bed</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/bicycle</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/blanket</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/boat</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/body</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/book</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/broadband</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/bus</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/bus-pass</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/cable</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/car</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/ceiling-light</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/chest-of-drawers</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/computer</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/cup</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/cupboard</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/duvet</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/flat</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/fork</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/google</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/group</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/hair</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/hairdryer</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/hand</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/helicopter</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/house</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/internet</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/kettle</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/kilogram</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/knife</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/lift</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/lorry</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/microwave</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/mile</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/mobile-phone</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/mobile-telephone</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/money</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/moon</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/motorbike</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/mountain</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/penny</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/pillow</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/plate</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/pound</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/railway-station</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/river</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/sat-nav</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/scissors</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/sea</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/sheet</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/sky</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/spoon</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/stairs</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/star</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/sun</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/table-lamp</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/taxi</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/television</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/ticket</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/toaster</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/toothbrush</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/train</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/tram</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/tube</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/uber</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/ufo</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/vacuum-cleaner</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/wallet</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/way</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/wifi</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/billion</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/eight</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/eighteen</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/eighteenth</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/eighth</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/eighty</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/eleven</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/eleventh</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/fifteen</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/fifteenth</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/fifth</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/fifty</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/first-ordinal</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/forty</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/four</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/fourteen</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/fourteenth</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/fourth</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/hundred</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/hundredth</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/million</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/nine</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/nineteen</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/nineteenth</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/ninety</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/ninth</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/one</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/second</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/seven</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/seventeen</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/seventeenth</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/seventh</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/seventy</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/six</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/sixteen</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/sixteenth</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/sixth</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/sixty</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/ten</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/tenth</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/third</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/thirteen</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/thirteenth</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/thirty</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/thousand</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/thousandth</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/three</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/twelfth</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/twelve</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/twentieth</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/twenty</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/two</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/zero</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/again</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/all</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/always</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/bad</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/best</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/better</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/big</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/different</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/easy</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/enough</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/every</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/evil</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/fantastic</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/far</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/fed-up</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/few</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/first</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/full</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/funny</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/half</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/hard</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/high</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/ill</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/interesting</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/last</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/little</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/lots</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/many</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/medical</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/most</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/other</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/painful</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/patient</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/perfect</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/plenty</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/ready</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/real</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/really</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/right</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/same</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/small</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/some</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/still</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/strict</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/strong</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/tired</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/top</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/true</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/very</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/well</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/worse</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/wrong</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/young</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/belfast</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/birmingham</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/blackpool</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/brighton</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/china</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/denmark</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/dublin</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/edinburgh</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/england</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/finland</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/france</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/gaelic</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/germany</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/glasgow</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/greece</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/india</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/ireland</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/italy</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/japan</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/leeds</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/leicester</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/liverpool</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/london</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/manchester</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/northern-ireland</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/norway</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/pakistan</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/paris</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/portsmouth</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/portugal</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/rome</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/russia</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/scotland</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/spain</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/sweden</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/usa</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/wales</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/welsh</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/area</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/bank</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/club</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/english</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/farm</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/home</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/hospital</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/pub</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/room</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/shop</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/world</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/bat</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/bird</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/butterfly</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/cat</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/chicken</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/cockerel</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/cow</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/deer</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/duck</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/elephant</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/frog</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/giraffe</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/goat</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/insect</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/lion</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/mouse</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/pig</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/rhino</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/sheep</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/snake</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/tiger</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/actor</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/aunt</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/baby</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/baker</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/boss</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/both-of-us</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/boy</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/boyfriend</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/brother</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/builder</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/carpenter</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/child</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/children</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/cousin</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/daughter</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/dentist-interpreter</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/doctor</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/electrician</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/family</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/father</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/friend</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/girl</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/girlfriend</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/grandfather</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/grandmother</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/hairdresser</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/king</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/lady</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/man</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/monster</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/mother</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/nephew</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/niece</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/nurse</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/parents</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/person</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/plumber</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/prince</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/princess</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/queen</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/robot</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/singer</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/sister</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/son</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/spouse</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/staff</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/teacher</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/twins</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/uncle</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/witch</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/wizard</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/woman</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/afternoon-meal</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/apple</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/bacon</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/banana</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/beer</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/biscuit</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/bread</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/breakfast</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/burger</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/cake</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/carrot</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/cheese</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/cherry</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/chips</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/coffee</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.signbsl.com/sign/cola</loc>
+  <lastmod>2024-04-01T17:04:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+
+
+</urlset>
+"""
+
+# Parse XML
+root = ET.fromstring(xml_data)
+
+# Define namespace
+namespace = {'sitemap': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
+
+# Extract URLs
+urls = [url.find('sitemap:loc', namespace).text for url in root.findall('sitemap:url', namespace)
+        if url.find('sitemap:loc', namespace).text.startswith('https://www.signbsl.com/sign/')]
+
+
+sign_mappings = {}
+
+# New dictionary to store the updated mappings
+with open('SignMappings/updated_mappings.json') as file:
+    updated_sign_mappings = json.load(file)
+
+# Base URL of the website
+base_url = "https://www.signbsl.com"
+
+for url in urls:
+    url=url.replace('https://www.signbsl.com/sign/', '')
+    sign_mappings[url] = f"/sign/{url}"
+
+
+
+print("Fetching video links for the signs...")
+print("First 5 signs:")
+print(list(sign_mappings.items())[:5])
+# New dictionary to store the updated mappings
+with open('SignMappings/updated_mappings.json') as file:
+    updated_sign_mappings = json.load(file)
+
+# Iterate over the initial mappings
+for word, path in sign_mappings.items():
+    # Construct the full URL to fetch
+    url = f"{base_url}{path}"
+    print(f"Fetching video link for {word} from {url}...")
+    try:
+        # Fetch the page content
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an error for bad responses
+        soup = BeautifulSoup(response.content, 'html.parser')
+        
+        # Find the first video link in the <head> section
+        for link in soup.head.find_all('meta', attrs={'content': True}):
+            content = link['content']
+            if content.startswith('https://media.signbsl.com/videos/bsl/'):
+                updated_sign_mappings[word] = content
+                break
+    except requests.RequestException as e:
+        print(f"Error fetching {url}: {e}")
+
+# Write the updated mappings to a new JSON file
+with open('SignMappings/updated_mappings.json', 'w') as file:
+    json.dump(updated_sign_mappings, file, indent=4)
+
+print("Updated mappings have been written to SignMappings/updated_mappings.json.")
+
+'''
+''' 
+# TO REMOVE DUPLICATES
+
+# Load the dataset
+with open('SignMappings/updated_mappings.json') as file:
+    sign_mappings = json.load(file)
+
+# Prepare a list to hold keys to remove
+keys_to_remove = []
+
+# Use a set to track seen links
+seen_links = set()
+
+for word, link in sign_mappings.items():
+    # Check for the "not found" link
+    if link == "https://media.signbsl.com/videos/bsl/404":
+        keys_to_remove.append(word)
+    else:
+        # For other links, keep the first occurrence and mark duplicates for removal
+        if link in seen_links:
+            keys_to_remove.append(word)
+        else:
+            seen_links.add(link)
+
+# Remove the identified keys
+for key in keys_to_remove:
+    del sign_mappings[key]
+
+# Write the updated mappings to a new JSON file
+with open('SignMappings/updated_mappings.json', 'w') as file:
+    json.dump(sign_mappings, file, indent=4)
+'''
+# TO make the key lowercase
+# Load the dataset
+with open('SignMappings/updated_mappings.json') as file:
+    sign_mappings = json.load(file)
+
+# Create a new dictionary with lowercase keys
+lowercase_mappings = {key.lower(): value for key, value in sign_mappings.items()}
+
+# Write the updated mappings to a new JSON file
+with open('SignMappings/updated_mappings.json', 'w') as file:
+    json.dump(lowercase_mappings, file, indent=4)

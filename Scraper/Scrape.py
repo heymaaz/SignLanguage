@@ -1,7 +1,7 @@
 import json
 import requests
 from bs4 import BeautifulSoup
-
+'''
 # Load the initial sign mappings from the JSON file
 with open('SignMappings/words.json') as file:
     sign_mappings = json.load(file)
@@ -11,14 +11,24 @@ with open('SignMappings/alphabets.json') as file:
 with open('SignMappings/digits.json') as file:
     sign_mappings.update(json.load(file))
 print("Loaded initial sign mappings.")
+'''
 
 # Base URL of the website
 base_url = "https://www.signbsl.com"
+# Create urls for the signs
+signed_caption = ""
+signed_caption = signed_caption.lower()
+signed = signed_caption.split()
+sign_mappings = {}
+for word in signed:
+    sign_mappings[word] = f"/sign/{word}"
+
 print("Fetching video links for the signs...")
 print("First 5 signs:")
 print(list(sign_mappings.items())[:5])
 # New dictionary to store the updated mappings
-updated_sign_mappings = {}
+with open('SignMappings/updated_mappings.json') as file:
+    updated_sign_mappings = json.load(file)
 
 # Iterate over the initial mappings
 for word, path in sign_mappings.items():

@@ -1,5 +1,43 @@
 from flask import Flask
 import json
+import re
+
+def extract_sentences(vtt_content):
+    sentences = []
+    current_sentence = ""
+    last_added = ""  # Keep track of the last added segment to avoid duplicates
+    
+    for line in vtt_content.split('\n'):
+        # Remove timestamps and align instructions
+        if "-->" in line or line.startswith("WEBVTT") or line.startswith("Kind:") or line.startswith("Language:"):
+            continue
+        
+        # Remove HTML-like tags and their contents
+        line_text = re.sub(r'<[^>]+>', '', line).strip()
+        
+        if not line_text or line_text == last_added:
+            # Skip empty lines and duplicates
+            continue
+        
+        if line_text.endswith(('.', '?', '!')):
+            # End of a sentence
+            current_sentence += " " + line_text
+            sentences.append(current_sentence.strip())
+            current_sentence = ""  # Reset for the next sentence
+        else:
+            # Mid-sentence or continuation
+            if current_sentence and not current_sentence.endswith(line_text):
+                current_sentence += " " + line_text
+            elif not current_sentence:
+                current_sentence = line_text
+            
+        last_added = line_text  # Update last added segment
+    
+    # Catch any trailing sentence without proper punctuation
+    if current_sentence:
+        sentences.append(current_sentence.strip())
+
+    return sentences
 
 app = Flask(__name__)
 
@@ -19,6 +57,7 @@ def download_subs(url):
         'subtitleslangs': ['en'],  # Specify the language code for the subtitles you want to download
         'skip_download': True,  # Skip downloading the video
         'writeautomaticsub': True,  # Write the automatically generated subtitle file
+        'outtmpl': 'subtitles/%(id)s.%(ext)s', # Save to subtitles folder
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -27,8 +66,7 @@ def download_subs(url):
         if video_id:
             ydl.download([video_id])
             filename = ydl.prepare_filename(info_dict).split('.')[0]
-            #return filename + '.en.vtt'
-        #return None
+
         if filename:
             from openai import OpenAI
             client = OpenAI()
@@ -36,13 +74,18 @@ def download_subs(url):
             with open('SignMappings/updated_mappings.json') as file:
                 gloss_dict = json.load(file)
 
-            subtitle = open(filename+'.en.vtt', 'r').read()
-            if subtitle:
+            vtt_content = open(filename+'.en.vtt', 'r').read()
+            
+            subtitles = extract_sentences(vtt_content)
+            if subtitles:
+                subtitle = ' '.join(subtitles)
                 completion = client.chat.completions.create(
                 #model="gpt-4",
-                model="gpt-4-turbo-preview",
+                #model="gpt-4-turbo-preview",
+                model="ft:gpt-3.5-turbo-0125:personal:gloss-2:99E2oJOT",
                 messages=[
-                    {"role": "system", "content": "You are a sign language translator, skilled in translating English to BSL GLOSS. You should respond to the following prompts only with the BSL GLOSS after convertion. Don't worry about punctuation. GLOSS can only be from these words: "+', '.join(gloss_dict.keys())+". If gloss is not available, use fingerspelling. For example, if the prompt is 'Hello, how are you?', you should respond with 'hello how you'. if the prompt is 'I am good', you should respond with 'good'. if good is not available, you should respond with 'g o o d'. If machine is not available, you should respond with 'm a c h i n e'."},
+                    {"role": "system", "content": "You are a sign language translator, skilled in translating English to BSL GLOSS. You should respond to the prompts only with the BSL GLOSS after conversion. Don't worry about punctuation. If gloss is not available, use fingerspelling. You can only use the following gloss- "+', '.join(gloss_dict.keys())},
+                    #{"role": "system", "content": "You are a sign language translator, skilled in translating English to BSL GLOSS. You should respond to the following prompts only with the BSL GLOSS after convertion. Don't worry about punctuation. GLOSS can only be from these words: "+', '.join(gloss_dict.keys())+". If gloss is not available, use fingerspelling. For example, if the prompt is 'Hello, how are you?', you should respond with 'hello how you'. if the prompt is 'I am good', you should respond with 'good'. if good is not available, you should respond with 'g o o d'. If machine is not available, you should respond with 'm a c h i n e'."},
                     {"role": "user", "content": "Here are the subtitles for the video: "+subtitle}
                 ]
                 )
