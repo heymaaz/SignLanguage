@@ -759,5 +759,14 @@
     "1000": "https://media.signbsl.com/videos/bsl/signstation/thousand.mp4",
     "10000": "https://media.signbsl.com/videos/bsl/signstation/10000.mp4",
     "100000": "https://media.signbsl.com/videos/bsl/signstation/100000.mp4",
-    "1000000": "https://media.signbsl.com/videos/bsl/signstation/1000000.mp4"
+    "1000000": "https://media.signbsl.com/videos/bsl/signstation/1000000.mp4",
+    "me" : "https://media.signbsl.com/videos/bsl/signstation/me.mp4",
+    "you" : "https://media.signbsl.com/videos/bsl/signstation/you.mp4",
+    "professor" : "https://media.signbsl.com/videos/bsl/gpnhs/mp4/professor.mp4",
+    "student" : "https://media.signbsl.com/videos/bsl/signstation/student.mp4",
+    "lawyer" : "https://media.signbsl.com/videos/bsl/BenFletcherTechSigns/mp4/lawyer.mp4",
+    "machine" : "https://media.signbsl.com/videos/bsl/signstation/machine.mp4",
+    "build":"https://media.signbsl.com/videos/bsl/signstation/build.mp4",
+    "guitar":"https://media.signbsl.com/videos/bsl/signstation/101-06-662.mp4",
+    "letter":"https://media.signbsl.com/videos/bsl/signstation/letter.mp4"
 }
