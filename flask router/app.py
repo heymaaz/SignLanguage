@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import jsonify
 import json
 import re
 
@@ -90,7 +91,25 @@ def download_subs(url):
                 ]
                 )
 
-                return(completion.choices[0].message.content)
+                #return(completion.choices[0].message.content)
+                # for each word in the completion, check if it is in the gloss_dict and return the gloss
+                # if not, return the word as fingerspelling
+                gloss = []
+                for word in completion.choices[0].message.content.split():
+                    if word.lower() in gloss_dict:
+                        gloss.append(gloss_dict[word.lower()])
+                    else:
+                        # fingerspelling, but only for alphabetic characters
+                        for letter in word:
+                            if letter.isalpha():  # Check if the character is alphabetic
+                                gloss.append(gloss_dict[letter.lower()])
+                
+                #return ' '.join(gloss)
+                # return the gloss as a response in json format with index
+                return jsonify({i+1: gloss[i] for i in range(len(gloss))})
+
+                
+
                 #return f'Subtitles file saved as {filename}.en.vtt'
             else: return 'file not found'
         return 'No subtitles found'
