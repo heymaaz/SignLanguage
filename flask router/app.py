@@ -92,55 +92,37 @@ def download_subs(url):
             subtitles_with_time = extract_sentences_with_time(vtt_content)
 
             if subtitles_with_time:
-                subtitle = '\n'.join([item["sentence"] for item in subtitles_with_time])
-                
-                completion = client.chat.completions.create(
-                #model="gpt-4",
-                model="gpt-4-turbo-preview",
-                #model="ft:gpt-3.5-turbo-0125:personal:gloss-2:99E2oJOT",
-                messages=[
-                    {"role": "system", "content": """
-                     You are a sign language translator, skilled in translating English to BSL GLOSS. 
-                     You should respond to the prompts only with the BSL GLOSS after conversion. 
-                     Don't worry about punctuation or capitalisation but keep the new line characters in the same place.
-                     You should keep the same number of lines as the subtitles. number of lines are: """+str(len(subtitles_with_time))+"""
-                     which can be found in the subtitles using the new line character \n.
-                     Try to keep the glosses short and simple.
-                     FOr example, if the subtitle is "Hello, how are you?", the gloss should be "HELLO HOW YOU"
-                     If the subtitle is "I am fine \n thank you", the gloss should be "FINE \n THANK YOU" keeping the new line character
-                     Remember you can't add or remove new lines. If you do then score will be deducted by 100.
-                     Although you keep the new lines, you should summarise the subtitles along multiple lines, but keep the same number of lines.
-                     If gloss is not available, use fingerspelling. You can only use the following gloss- """
-                     +', '.join(gloss_dict.keys())},
-                    {"role": "user", "content": "Here are the subtitles for the video:\n"+subtitle}
-                ]
-                )
-
-                #return(completion.choices[0].message.content)
-                # for each word in the completion, check if it is in the gloss_dict and return the gloss
-                # if not, return the word as fingerspelling
                 gloss_with_time = []
-                i = 0
-                for word in completion.choices[0].message.content.split('\n'):
-                    time = subtitles_with_time[i]["time"]
-                    i=i+1
-                    gloss = []
-                    if word.lower() in gloss_dict:
-                        gloss.append(gloss_dict[word.lower()])
-                    else:
-                        # fingerspelling, but only for alphabetic characters
-                        for letter in word:
-                            if letter.isalpha():  # Check if the character is alphabetic
-                                gloss.append(gloss_dict[letter.lower()])
-                    gloss_with_time.append({"time": time, "gloss": gloss})
-                #return ' '.join(gloss)
-                # return the gloss as a response in json format with index
+                for subtitle_with_time in subtitles_with_time:
+                    print(subtitle_with_time)
+                    completion = client.chat.completions.create(
+                    #model="gpt-4",
+                    model="gpt-4-turbo-preview",
+                    #model="ft:gpt-3.5-turbo-0125:personal:gloss-2:99E2oJOT",
+                    messages=[
+                        {"role": "system", "content": """
+                        You are a sign language translator, skilled in translating English to BSL GLOSS. 
+                        You should respond to the prompts only with the BSL GLOSS after conversion. 
+                        Don't worry about punctuation or capitalisation but keep the new line characters in the same place.
+                        You should keep the same number of lines as the subtitles. number of lines are: """+str(len(subtitles_with_time))+"""
+                        which can be found in the subtitles using the new line character \n.
+                        Try to keep the glosses short and simple.
+                        FOr example, if the subtitle is "Hello, how are you?", the gloss should be "HELLO HOW YOU"
+                        If the subtitle is "I am fine \n thank you", the gloss should be "FINE \n THANK YOU" keeping the new line character
+                        Remember you can't add or remove new lines. If you do then score will be deducted by 100.
+                        Although you keep the new lines, you should summarise the subtitles along multiple lines, but keep the same number of lines.
+                        If gloss is not available, use fingerspelling. You can only use the following gloss- """
+                        +', '.join(gloss_dict.keys())},
+                        {"role": "user", "content": subtitle_with_time["sentence"]}
+                    ]
+                    )
+                    if completion.choices[0].message:
+                        gloss_message = completion.choices[0].message.content
+                        # Ensure gloss_message is a string or a serializable object
+                        print(type(gloss_message))  # Debugging: Check the type
+                        gloss_with_time.append({"time": subtitle_with_time["time"], "gloss": gloss_message})
                 return jsonify({item["time"]: item["gloss"] for item in gloss_with_time})
 
-                
-                #return jsonify(subtitles_with_time)"#sentence": "I invented a machine that smokes","time": "00:00:00.280"
-                #return jsonify(subtitle)#I invented a machine that smokes\ncigarettes to find out what would happen\n
-                #return f'Subtitles file saved as {filename}.en.vtt'
             else: return 'file not found'
         return 'No subtitles found'
     
