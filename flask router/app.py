@@ -2,6 +2,7 @@ import os
 from flask import Flask
 from flask import jsonify
 from flask import Response, stream_with_context
+from flask_cors import CORS
 import json
 import re
 
@@ -47,6 +48,9 @@ def extract_sentences_with_time(vtt_content):
 
 
 app = Flask(__name__)
+# Allow all origins for development purposes
+CORS(app, resources={"*": {"origins": "*"}})
+
 
 @app.route('/')
 def home():

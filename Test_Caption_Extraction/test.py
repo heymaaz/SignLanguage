@@ -2,6 +2,8 @@ import os
 from flask import Flask
 from flask import jsonify
 from flask import Response, stream_with_context
+from flask_cors import CORS
+
 import json
 import re
 
@@ -47,6 +49,20 @@ def extract_sentences_with_time(vtt_content):
 
 
 app = Flask(__name__)
+# Allow all origins for development purposes
+CORS(app, resources={r"/url/*": {"origins": "*"}})
+
+mock_glosses = [
+    {"time": "00:00:00.000", "gloss": "FIVE TECHNOLOGY MYTHS WRONG MORE SIGNAL BARS"},
+    {"time": "00:00:02.940", "gloss": "MORE BARS BETTER SERVICE"},
+    {"time": "00:00:04.920", "gloss": "PHONE SHOW HOW CLOSE"},
+    {"time": "00:00:06.600", "gloss": "CELL-TOWER NEAR NOT"},
+    {"time": "00:00:08.580", "gloss": "SPEED FULL SIGNAL STILL FEEL SLOW"},
+    {"time": "00:00:10.740", "gloss": "IF NETWORK BUSY AIRPLANE MODE"},
+    {"time": "00:00:12.660", "gloss": "CHARGE PHONE FAST TECHNICALLY"},
+    # Add the rest of your mock glosses here...
+]
+
 
 @app.route('/')
 def home():
@@ -84,6 +100,10 @@ def download_subs(url):
         print(filename)
         
         def generate(subtitles_with_time):
+            for gloss_data in mock_glosses:
+                print(gloss_data)
+                yield f"data: {json.dumps(gloss_data)}\n\n"
+            '''
             for subtitle_with_time in subtitles_with_time:
                 #print(subtitle_with_time)
                 completion = client.chat.completions.create(
@@ -110,6 +130,7 @@ def download_subs(url):
                 if completion.choices[0].message:
                     gloss_message = completion.choices[0].message.content
                     yield f"data: {json.dumps({'time': subtitle_with_time['time'], 'gloss': gloss_message})}\n\n"
+            '''
 
 
         if filename:
