@@ -1,6 +1,7 @@
 import os
 from flask import Flask
 from flask import jsonify
+from flask import Response, stream_with_context
 from flask_cors import CORS
 
 import json
@@ -97,17 +98,11 @@ def download_subs(url):
                 filename = ydl.prepare_filename(info_dict).split('.')[0]
 
         print(filename)
-        def time_to_seconds(t):
-            """Convert time string HH:MM:SS.SSS to total seconds."""
-            hours, minutes, seconds = [float(part) for part in t.split(':')]
-            return int(hours * 3600 + minutes * 60 + seconds)
         
         def generate(subtitles_with_time):
-            gloss_with_time = []
             for gloss_data in mock_glosses:
-                gloss_with_time.append(gloss_data)
-
-            
+                print(gloss_data)
+                yield f"data: {json.dumps(gloss_data)}\n\n"
             '''
             for subtitle_with_time in subtitles_with_time:
                 #print(subtitle_with_time)
@@ -134,18 +129,8 @@ def download_subs(url):
                 )
                 if completion.choices[0].message:
                     gloss_message = completion.choices[0].message.content
-                    # Ensure gloss_message is a string or a serializable object
-                    print(type(gloss_message))  # Debugging: Check the type
-                    gloss_with_time.append({"time": subtitle_with_time["time"], "gloss": gloss_message})
-
+                    yield f"data: {json.dumps({'time': subtitle_with_time['time'], 'gloss': gloss_message})}\n\n"
             '''
-            
-            #return jsonify({item["time"]: item["gloss"] for item in gloss_with_time})
-            # Convert times to seconds and prepare the dictionary for jsonify
-            data_to_send = {time_to_seconds(item["time"]): item["gloss"] for item in gloss_with_time}
-
-            # Use jsonify to send the converted data
-            return jsonify(data_to_send)
 
 
         if filename:
@@ -156,15 +141,13 @@ def download_subs(url):
                 gloss_dict = json.load(file)
 
             vtt_content = open(filename+'.en.vtt', 'r').read()
-            if vtt_content:
-                print('reading vtt file')
+            
             subtitles_with_time = extract_sentences_with_time(vtt_content)
+
             if subtitles_with_time:
-                return (generate(subtitles_with_time))
-        
-        else:
-            return jsonify({'error': 'file not found'})
-    return jsonify({'error': 'No subtitles found'})
+                # Wrap the generator with stream_with_context to keep the app context
+                return Response(stream_with_context(generate(subtitles_with_time)), mimetype='text/event-stream')
+        return 'No subtitles found'
     
 
 if __name__ == '__main__':
